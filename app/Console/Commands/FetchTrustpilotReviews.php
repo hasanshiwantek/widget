@@ -29,15 +29,16 @@ class FetchTrustpilotReviews extends Command
     public function handle()
     {
 
-        \Log::info('app:fetch-trustpilot-reviews is running');
+        \Log::info('fetch:trustpilot-reviews is running');
 
-        $baseUrl = 'https://brokerbinbackend.shiwantek.com/api/proxy/trustpilot?page=1';
+        $baseUrl = 'https://trustpilot.shiwantek.com/api/proxy/trustpilot?page=1';
         $url = $baseUrl; // Start with the first page
         $hasMorePages = true;
     
         try {
             Review::truncate(); // Clear old data before fetching new data
     
+            // Review::query()->delete();
             while ($hasMorePages) {
                 $response = Http::get($url);
     
