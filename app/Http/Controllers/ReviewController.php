@@ -23,7 +23,16 @@ class ReviewController extends Controller
 
     public function stats(){
         $stats = Stat::latest('updated_at')->first();
-        $count = $stats -> count();
+        // $count = $stats -> count();
+
+
+        if ($stats) {
+            // $stats is not null, so you can use it
+            $count = $stats->count();
+        } else {
+            // $stats is null
+            $count = 0; // or handle accordingly
+        }
 
         return response()->json([
             'status' => true,
