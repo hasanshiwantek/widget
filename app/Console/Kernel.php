@@ -23,6 +23,7 @@ class Kernel extends ConsoleKernel
     {
         // $schedule->command('inspire')->hourly();
         $schedule->command('fetch:trustpilot-reviews')->everyMinute();
+        $schedule->command('update:stats')->everyMinute();
 
         $schedule->call(function () {
             \Log::info('Scheduler is running!');

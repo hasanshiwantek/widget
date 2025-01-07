@@ -31,14 +31,14 @@ class FetchTrustpilotReviews extends Command
 
         \Log::info('fetch:trustpilot-reviews is running');
 
-        $baseUrl = 'https://trustpilot.shiwantek.com/api/proxy/trustpilot?page=1';
+        $baseUrl = 'https://widget.shiwantek.com/api/proxy/trustpilot?page=1';
         $url = $baseUrl; // Start with the first page
         $hasMorePages = true;
     
         try {
-            Review::truncate(); // Clear old data before fetching new data
+            // Review::truncate(); // Clear old data before fetching new data
     
-            // Review::query()->delete();
+            Review::query()->delete();
             while ($hasMorePages) {
                 $response = Http::get($url);
     

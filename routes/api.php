@@ -2,6 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ReviewController;
 
 /*
 |--------------------------------------------------------------------------
@@ -37,3 +38,6 @@ Route::get('/proxy/trustpilot', function (Request $request) {
     // Return an error response if fetching fails
     return response()->json(['error' => 'Unable to fetch data'], 500);
 });
+
+Route::get('/reviews', [ReviewController::class, 'index']);
+Route::get('/stats', [ReviewController::class, 'stats']);

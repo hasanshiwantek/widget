@@ -12,9 +12,22 @@ class ReviewController extends Controller
 
     public function index(){
         $reviews = Review::all();
+        $count = $reviews -> count();
+
         return response()->json([
             'status' => true,
-            'data' => $reviews
+            'data' => $reviews,
+            'count' => $count
+        ], 200);
+    }
+
+    public function stats(){
+        $stats = Stat::latest('updated_at')->first();
+        $count = $stats -> count();
+
+        return response()->json([
+            'status' => true,
+            'data' => $stats,
         ], 200);
     }
 }
