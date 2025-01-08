@@ -11,6 +11,7 @@ class Review extends Model
     use HasFactory, SoftDeletes;
 
     protected $fillable = [
+        'brand',
         'reviewer',
         'location',
         'totalReviews',

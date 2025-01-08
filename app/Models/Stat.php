@@ -11,6 +11,7 @@ class Stat extends Model
     use HasFactory, SoftDeletes;
 
     protected $fillable = [
+        'brand',
         'count',
         'rating',
         'status',

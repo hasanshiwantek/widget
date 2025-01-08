@@ -7,14 +7,14 @@ use App\Models\Stat;
 use App\Models\Review;
 use Illuminate\Support\Facades\Http;
 
-class UpdateStatsTable extends Command
+class UpdateServerblinkStats extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'update:stats';
+    protected $signature = 'update:serverblink-stats';
 
     /**
      * The console command description.
@@ -31,11 +31,11 @@ class UpdateStatsTable extends Command
     public function handle()
     {
         \Log::info('Fetching Trustpilot stats...');
-        $url = 'https://widget.shiwantek.com/api/proxy/newtownspares';
+        $url = 'https://widget.shiwantek.com/api/proxy/serverblink';
 
         try {
 
-            Stat::query()->where('brand', 1)->delete();
+            Stat::query()->where('brand', 2)->delete();
 
             // Fetch HTML content from the Trustpilot proxy URL
             $response = Http::get($url);
@@ -66,7 +66,7 @@ class UpdateStatsTable extends Command
 
             // Save data into the stats table
             Stat::create([
-            'brand' => 1,
+            'brand' => 2,
             'count' => $reviewCount,
             'rating' => $ratingCount,
             'status' => $ratingStatus,

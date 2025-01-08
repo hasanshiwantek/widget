@@ -11,6 +11,8 @@ class Kernel extends ConsoleKernel
     protected $commands = [
         Commands\FetchTrustpilotReviews::class, // Register your custom command here
         Commands\UpdateStatsTable::class,
+        Commands\FetchServerblinkReviews::class, // Register your custom command here
+        Commands\UpdateServerblinkStats::class,
     ];
 
     
@@ -25,6 +27,8 @@ class Kernel extends ConsoleKernel
         // $schedule->command('inspire')->hourly();
         $schedule->command('fetch:trustpilot-reviews')->weeklyOn(1, '01:00');
         $schedule->command('update:stats')->weeklyOn(1, '02:00');
+        $schedule->command('fetch:serverblink-reviews')->weeklyOn(1, '01:00');
+        $schedule->command('update:serverblink-stats')->weeklyOn(1, '02:00');
 
         $schedule->call(function () {
             \Log::info('Scheduler is running!');

@@ -7,21 +7,21 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 use App\Models\Review;
 
-class FetchTrustpilotReviews extends Command
+class FetchServerblinkReviews extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'fetch:trustpilot-reviews';
+    protected $signature = 'fetch:serverblink-reviews';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Fetch and update Newtownspares Trustpilot reviews';
+    protected $description = 'Fetch and update Serverblink Trustpilot reviews';
 
      /**
      * Execute the console command.
@@ -29,16 +29,14 @@ class FetchTrustpilotReviews extends Command
     public function handle()
     {
 
-        \Log::info('fetch:trustpilot-reviews is running');
-
-        $baseUrl = 'https://widget.shiwantek.com/api/proxy/newtownspares?page=1';
+        $baseUrl = 'https://widget.shiwantek.com/api/proxy/serverblink?page=1';
         $url = $baseUrl; // Start with the first page
         $hasMorePages = true;
     
         try {
             // Review::truncate(); // Clear old data before fetching new data
     
-            Review::query()->where('brand', 1)->delete();
+            Review::query()->where('brand', 2)->delete();
             while ($hasMorePages) {
                 $response = Http::get($url);
     
@@ -72,7 +70,7 @@ class FetchTrustpilotReviews extends Command
                     $stars = $xpath->query('.//div[@class="styles_reviewHeader__iU9Px"]//img', $card)?->item(0)->getAttribute('src') ?? '';
     
                     Review::create([
-                        'brand' => 1,
+                        'brand' => 2,
                         'reviewer' => $reviewer,
                         'location' => $location,
                         'totalReviews' => (int) filter_var($totalReviews, FILTER_SANITIZE_NUMBER_INT),
