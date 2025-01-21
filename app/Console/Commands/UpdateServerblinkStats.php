@@ -53,10 +53,10 @@ class UpdateServerblinkStats extends Command
             $xpath = new \DOMXPath($dom);
 
             // Extract data using XPath
-            $reviewCountElement = $xpath->query('//p[contains(@class, "typography_body-l__KUYFJ") and contains(@class, "typography_appearance-default__AAY17")]');
-            $ratingCountElement = $xpath->query('//span[contains(@class, "typography_heading-m__T_L_X") and contains(@class, "typography_appearance-default__AAY17")]');
-            $ratingStatusElement = $xpath->query('//span[contains(@class, "typography_body-l__KUYFJ") and contains(@class, "typography_appearance-subtle__8_H2l") and contains(@class, "styles_text__W4hWi")]');
-            $ratingImageElement = $xpath->query('//div[contains(@class, "star-rating_starRating__4rrcf") and contains(@class, "star-rating_medium__iN6Ty")]/img');
+            $reviewCountElement = $xpath->query('//p[contains(@class, "typography_body-l__v5JLj") and contains(@class, "typography_appearance-default__t8iAq")]');
+            $ratingCountElement = $xpath->query('//span[contains(@class, "typography_heading-m__UdgHy") and contains(@class, "typography_appearance-default__t8iAq")]');
+            $ratingStatusElement = $xpath->query('//span[contains(@class, "typography_body-l__v5JLj") and contains(@class, "typography_appearance-subtle__PYOVM") and contains(@class, "styles_text__r3o5y")]');
+            $ratingImageElement = $xpath->query('//div[contains(@class, "star-rating_starRating__sdbkn") and contains(@class, "star-rating_medium__Oj7C9")]/img');
 
             // Parse values
             $reviewCount = $reviewCountElement->length > 0 ? $this->extractNumericValue($reviewCountElement->item(0)->textContent) : null;
