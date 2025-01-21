@@ -1,0 +1,118 @@
+// Trustpilot Widget
+
+.custom-widget {
+background: transparent;
+color: #333;
+padding: 30px 0 25px 0;
+overflow: hidden;
+}
+.custom-widget .wrapper-left a {
+color: #333;
+font-weight: 600;
+text-decoration: underline;
+}
+.custom-widget .wrapper-left {
+text-align: center;
+}
+.custom-widget .wrapper-left .title {
+color: #333;
+font-size: 24px;
+padding: 0;
+margin: 0;
+margin-bottom: 10px;
+}
+.custom-widget .wrapper-left .rating img {
+max-width: 160px;
+margin: auto;
+}
+.custom-widget .wrapper-left .info {
+color: #333;
+font-size: 13px;
+line-height: 45px;
+}
+.custom-widget .wrapper-left .brand-logo img {
+max-width: 150px;
+margin: auto;
+margin-top: 0px;
+display: inline-block;
+}
+.custom-widget .wrapper-left .brand-logo p {
+font-size: 18px;
+line-height: 35px;
+color: #333;
+text-align: center;
+display: inline-block;
+}
+.custom-widget .reviews {
+// margin-left: 2%
+}
+/* The controlsy */
+.custom-widget .carousel-control {
+    height: 25px;
+    width: 25px;
+    border: 1px solid #9E9E9E;
+    border-radius: 50%;
+    margin-top: 60px;
+    font-size: 25px;
+    background: transparent;
+    line-height: 18px;
+}
+.custom-widget .carousel-control.right {
+margin-right: -50px;
+color: #333;
+text-shadow: none;
+}
+.custom-widget .carousel-control.left {
+left: -70px;
+color: #333;
+text-shadow: none;
+}
+.custom-widget .carousel-control.right:hover, .custom-widget .carousel-control.left:hover {
+    color: #333;
+}
+.custom-widget .carousel-inner .rating img {
+max-width: 110px
+}
+.custom-widget .carousel-inner{
+    overflow: hidden
+}
+.custom-widget .carousel-inner .date, .custom-widget .carousel-inner .name {
+color: rgba(0,0,0,0.6);
+font-size: 13px;
+}
+.custom-widget .carousel-inner .title {
+margin: 15px 0 10px 0;
+font-weight: 700;
+text-overflow: ellipsis;
+overflow: hidden; 
+width: 100%; 
+white-space: nowrap; 
+}
+.custom-widget .carousel-inner .descriptions {
+    min-height: 42px;
+}
+.custom-widget .carousel-inner .name {
+    margin-top: 25px;
+    margin-bottom: 25px;
+}
+
+.custom-widget .slick-slide img{
+    max-width: 100%;
+    width: 100%;
+}
+
+.custom-widget .slick-slide{
+    padding-right: 20px;
+}
+
+.custom-widget .pull-right {
+    float: right !important;
+    margin-top: 5%;
+}
+
+.custom-widget .pull-left {
+    float: left !important;
+    margin-top: 5%;
+}
+
+// Trustpilot Widget

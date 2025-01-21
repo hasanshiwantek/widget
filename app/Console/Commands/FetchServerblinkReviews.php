@@ -50,7 +50,7 @@ class FetchServerblinkReviews extends Command
                 @$dom->loadHTML($htmlContent);
     
                 $xpath = new \DOMXPath($dom);
-                $reviewCards = $xpath->query('//div[contains(@class, "styles_cardWrapper__LcCPA")]');
+                $reviewCards = $xpath->query('//div[contains(@class, "styles_cardWrapper__w4HBQ")]');
     
                 if ($reviewCards->length === 0) {
                     $this->info("No reviews found at URL: $url.");
@@ -67,7 +67,7 @@ class FetchServerblinkReviews extends Command
                     $reviewContent = $this->getText($xpath, $card, './/p[@data-service-review-text-typography="true"]');
                     $dateOfExperience = $this->getText($xpath, $card, './/p[@data-service-review-date-of-experience-typography="true"]');
                     $reviewUrl = $xpath->query('.//a[@data-review-title-typography="true"]', $card)?->item(0)->getAttribute('href') ?? '';
-                    $stars = $xpath->query('.//div[@class="styles_reviewHeader__iU9Px"]//img', $card)?->item(0)->getAttribute('src') ?? '';
+                    $stars = $xpath->query('.//div[@class="styles_reviewHeader__xV2js"]//img', $card)?->item(0)->getAttribute('src') ?? '';
     
                     Review::create([
                         'brand' => 2,

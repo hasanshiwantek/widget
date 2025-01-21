@@ -1,0 +1,96 @@
+<script type="application/ld+json" id="product-schema">
+
+    {
+        "@context": "https://schema.org/",
+        "@type": "Product",
+        "name": {{{JSONstringify product.title}}},
+        {{#if product.sku}}
+        "sku": "{{product.sku}}",
+        {{/if}}
+        {{#if product.mpn}}
+        "mpn": "{{product.mpn}}",
+        {{/if}}
+        {{#if product.gtin}}
+        "gtin{{length product.gtin}}": "{{product.gtin}}",
+        {{/if}}
+        "url" : "{{product.url}}",
+        "brand": {
+            "@type": "Brand",
+            "url": "{{product.brand.url}}",
+            "name": {{{JSONstringify product.brand.name}}}
+        },
+        "description": "{{encodeURI (sanitize product.description)}}",
+        "image": "{{getImage product.main_image 'zoom_size' (cdn theme_settings.default_image_product)}}",
+        "aggregateRating": {
+            "@type": "AggregateRating",
+            "ratingValue": "4.2",
+            "reviewCount": "44"
+        },
+        "review": [],
+        "offers": {
+            "@type": "Offer",
+            "priceCurrency": "{{currency_selector.active_currency_code}}",
+            {{#if product.price.price_range}}
+            "minPrice": "{{#if product.price.price_range.min.with_tax}}{{product.price.price_range.min.with_tax.value}}{{else}}{{product.price.price_range.min.without_tax.value}}{{/if}}",
+            "maxPrice": "{{#if product.price.price_range.max.with_tax}}{{product.price.price_range.max.with_tax.value}}{{else}}{{product.price.price_range.max.without_tax.value}}{{/if}}",
+            {{else}}
+            "price": "{{#if product.price.with_tax}}{{product.price.with_tax.value}}{{else}}{{product.price.without_tax.value}}{{/if}}",
+            {{/if}}
+            "itemCondition" : "https://schema.org/{{#if product.condition}}{{product.condition}}{{else}}New{{/if}}Condition",
+            "availability" : "https://schema.org/{{#if product.pre_order}}PreOrder{{else if product.out_of_stock}}OutOfStock{{else if product.can_purchase '===' false}}OutOfStock{{else}}InStock{{/if}}",
+            "url" : "{{product.url}}",
+            "priceValidUntil": "{{moment (moment add='31536000000') 'YYYY-MM-DD' }}",
+            "hasMerchantReturnPolicy": {
+              "@type": "MerchantReturnPolicy",
+              "url": "https://www.newtownspares.com/return-policy/",
+              "returnPolicyCategory": "https://schema.org/MerchantReturnFiniteReturnWindow",
+              "merchantReturnDays": "30",
+              "returnFees": "FreeReturn",
+              "returnMethod": "https://schema.org/ReturnByMail",
+              "applicableCountry": "US"
+            },
+            "shippingDetails": [{
+                "@type": "OfferShippingDetails",
+                
+                    "shippingDestination": [
+                        {
+                            "@type": "DefinedRegion",
+                            "addressCountry": "US",
+                            "addressRegion": [
+                                "AL", "AK", "AS", "AZ", "AR", "AE", "AA", "AP", "CA", "CO", "CT", "DE", "DC", "FM", "FL", "GA", "GU", "HI", "ID", "IL", "IN", "IA", "KS", "KY", "LA", "ME", "MH", "MD", "MA", "MI", "MN", "MS", "MO", "MT", "NE", "NV", "NH", "NJ", "NM", "NY", "NC", "ND", "MP", "OH", "OK", "OR", "PW", "PA", "PR", "RI", "SC", "SD", "TN", "TX", "UT", "VT", "VI", "VA", "WA", "WV", "WI", "WY"
+                            ]
+                        }
+                    ],
+                    "shippingRate": {
+                        "@type": "MonetaryAmount",
+                        "value": "{{#if product.price.with_tax}}{{product.price.with_tax.value}}{{else}}{{product.price.without_tax.value}}{{/if}}",
+                        "currency": "USD"
+                    },
+                    "deliveryTime": {
+                        "handlingTime": {
+                            "@type": "QuantitativeValue",
+                            "minValue": 1,
+                            "maxValue": 2,
+                            "unitCode": "DAY"
+                        },
+                        "transitTime": {
+                            "@type": "QuantitativeValue",
+                            "minValue": 3,
+                            "maxValue": 1,
+                            "unitCode": "DAY"
+                        }
+                    }
+                
+            }]
+        },
+        "hasMerchantReturnPolicy": {
+              "@type": "MerchantReturnPolicy",
+              "url": "https://www.newtownspares.com/return-policy/",
+              "returnPolicyCategory": "https://schema.org/MerchantReturnFiniteReturnWindow",
+              "merchantReturnDays": "30"
+            }
+            
+    }
+</script>
+
+
