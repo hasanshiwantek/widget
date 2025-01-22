@@ -14,7 +14,7 @@ class Kernel extends ConsoleKernel
         Commands\FetchServerblinkReviews::class,
         Commands\UpdateServerblinkStats::class,
         Commands\FetchCtspointReviews::class, 
-        Commands\UpdateCtspointStats::class,
+        Commands\FetchCtspointStats::class,
     ];
 
     
