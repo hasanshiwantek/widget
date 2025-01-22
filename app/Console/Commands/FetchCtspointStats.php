@@ -3,6 +3,9 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
+use App\Models\Stat;
+use App\Models\Review;
+use Illuminate\Support\Facades\Http;
 
 class FetchCtspointStats extends Command
 {
