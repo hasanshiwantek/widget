@@ -53,15 +53,15 @@ class FetchCtspointStats extends Command
             $xpath = new \DOMXPath($dom);
 
             // Extract data using XPath
-            $reviewCountElement = $xpath->query('//p[contains(@class, "typography_body-l__v5JLj") and contains(@class, "typography_appearance-default__t8iAq")]');
-            $ratingCountElement = $xpath->query('//span[contains(@class, "typography_heading-m__UdgHy") and contains(@class, "typography_appearance-default__t8iAq")]');
-            $ratingStatusElement = $xpath->query('//span[contains(@class, "typography_body-l__v5JLj") and contains(@class, "typography_appearance-subtle__PYOVM") and contains(@class, "styles_text__r3o5y")]');
-            $ratingImageElement = $xpath->query('//div[contains(@class, "star-rating_starRating__sdbkn") and contains(@class, "star-rating_medium__Oj7C9")]/img');
+            $reviewCountElement = $xpath->query('//p[contains(@class, "typography_body-s__IqDta") and contains(@class, "styles_reviewCount__NXlel")]');
+            $ratingCountElement = $xpath->query('//p[contains(@class, "typography_display-l__gUWQR") and contains(@class, "styles_trustScore__MVJJI")]');
+            $ratingStatusElement = $xpath->query('//h4[contains(@class, "typography_heading-xxs__UmE9o") and contains(@class, "styles_starRatingName__njtqK")]');
+            $ratingImageElement = $xpath->query('//div[contains(@class, "star-rating_starRating__sdbkn") and contains(@class, "star-rating_responsive__AzPOl")]/img');
 
             // Parse values
             $reviewCount = $reviewCountElement->length > 0 ? $this->extractNumericValue($reviewCountElement->item(0)->textContent) : null;
             $ratingCount = $ratingCountElement->length > 0 ? trim($ratingCountElement->item(0)->textContent) : null;
-            $ratingStatus = $ratingStatusElement->length > 0 ? $this->extractStatus($ratingStatusElement->item(0)->textContent) : null;
+            $ratingStatus = $ratingStatusElement->length > 0 ? $ratingStatusElement->item(0)->textContent : null;
             $ratingImage = $ratingImageElement->length > 0 ? $ratingImageElement->item(0)->getAttribute('src') : null;
 
             // Save data into the stats table

@@ -28,49 +28,56 @@ class FetchTrustpilotReviews extends Command
      */
     public function handle()
     {
-
         \Log::info('fetch:trustpilot-reviews is running');
 
         $baseUrl = 'https://widget.shiwantek.com/api/proxy/newtownspares?page=1';
-        $url = $baseUrl; // Start with the first page
+        $url = $baseUrl;
+        $page = 1;
         $hasMorePages = true;
-    
+
         try {
-            // Review::truncate(); // Clear old data before fetching new data
-    
             Review::query()->where('brand', 1)->delete();
+
             while ($hasMorePages) {
+                $url = "https://widget.shiwantek.com/api/proxy/newtownspares?page={$page}";
+                $this->info("Fetching page $page: $url");
+
                 $response = Http::get($url);
-    
+
                 if ($response->failed()) {
                     $this->error("Failed to fetch URL: $url");
                     break;
                 }
-    
+
                 $htmlContent = $response->body();
                 $dom = new \DOMDocument();
                 @$dom->loadHTML($htmlContent);
-    
                 $xpath = new \DOMXPath($dom);
-                $reviewCards = $xpath->query('//div[contains(@class, "styles_cardWrapper__w4HBQ")]');
-    
+
+                $reviewCards = $xpath->query('//div[contains(@class, "styles_cardWrapper__g8amG")]');
+
                 if ($reviewCards->length === 0) {
                     $this->info("No reviews found at URL: $url.");
-                    $hasMorePages = false; // Stop the loop as no more reviews are available
                     break;
                 }
-    
+
                 foreach ($reviewCards as $card) {
                     $reviewer = $this->getText($xpath, $card, './/span[@data-consumer-name-typography="true"]');
-                    $location = $this->getText($xpath, $card, './/div[@data-consumer-country-typography="true"]');
+                    $location = $this->getText($xpath, $card, './/span[@data-consumer-country-typography="true"]');
                     $totalReviews = $this->getText($xpath, $card, './/span[@data-consumer-reviews-count-typography="true"]');
                     $date = $this->getText($xpath, $card, './/time[@data-service-review-date-time-ago="true"]');
                     $reviewHeading = $this->getText($xpath, $card, './/h2[@data-service-review-title-typography="true"]');
                     $reviewContent = $this->getText($xpath, $card, './/p[@data-service-review-text-typography="true"]');
-                    $dateOfExperience = $this->getText($xpath, $card, './/p[@data-service-review-date-of-experience-typography="true"]');
-                    $reviewUrl = $xpath->query('.//a[@data-review-title-typography="true"]', $card)?->item(0)->getAttribute('href') ?? '';
-                    $stars = $xpath->query('.//div[@class="styles_reviewHeader__xV2js"]//img', $card)?->item(0)->getAttribute('src') ?? '';
-    
+                    $dateOfExperience = $this->getText($xpath, $card, './/p[@data-service-review-date-of-experience-typography="true"]/span');
+
+                    // Safe href extraction
+                    $reviewUrlNode = $xpath->query('.//a[@data-review-title-typography="true"]', $card)?->item(0);
+                    $reviewUrl = $reviewUrlNode ? 'https://www.trustpilot.com' . $reviewUrlNode->getAttribute('href') : '';
+
+                    // Safe stars img src
+                    $starsNode = $xpath->query('.//div[contains(@class, "star-rating_starRating__")]/img', $card)?->item(0);
+                    $stars = $starsNode ? $starsNode->getAttribute('src') : '';
+
                     Review::create([
                         'brand' => 1,
                         'reviewer' => $reviewer,
@@ -79,38 +86,43 @@ class FetchTrustpilotReviews extends Command
                         'date' => $date,
                         'reviewHeading' => $reviewHeading,
                         'reviewContent' => $reviewContent,
-                        'dateOfExperience' => str_replace('Date of experience: ', '', $dateOfExperience),
+                        'dateOfExperience' => trim(str_replace('Date of experience:', '', $dateOfExperience)),
                         'stars' => $stars,
-                        'url' => 'https://www.trustpilot.com' . $reviewUrl,
+                        'url' => $reviewUrl,
                     ]);
                 }
-    
+
                 $this->info("Fetched reviews from URL: $url.");
-    
-                // Find the "Next page" link
-                $nextPageLink = $xpath->query('//a[@aria-label="Next page"]')?->item(0);
-                if ($nextPageLink) {
-                    $nextPageUrl = 'https://www.trustpilot.com' . $nextPageLink->getAttribute('href');
-                    $this->info("Found Next page link: $nextPageUrl");
-    
-                    if (filter_var($nextPageUrl, FILTER_VALIDATE_URL)) {
-                        $url = $nextPageUrl; // Update the URL for the next iteration
-                    } else {
-                        $this->info("Next page URL is invalid. Stopping.");
-                        $hasMorePages = false;
-                    }
-                } else {
-                    $this->info("No Next page link found at URL: $url. Stopping.");
-                    $hasMorePages = false;
-                }
+                $page++;
+
+                // Pagination: look for the "Next page" button
+                // $nextPageNode = $xpath->query('//a[@data-pagination-button-next-link="true"]')?->item(0);
+                // if ($nextPageNode) {
+                //     $relativeUrl = $nextPageNode->getAttribute('href');
+                //     // $url = filter_var($relativeUrl, FILTER_VALIDATE_URL)
+                //     //     ? $relativeUrl
+                //     //     : 'https://widget.shiwantek.com' . $relativeUrl;
+
+                //     if (str_starts_with($relativeUrl, '/api/proxy/')) {
+                //         $url = 'https://widget.shiwantek.com' . $relativeUrl;
+                //         $this->info("Next page URL: $url");
+                //     } else {
+                //         $this->warn("Next page href is outside proxy: $relativeUrl. Stopping.");
+                //         $hasMorePages = false;
+                //     }
+                    
+                // } else {
+                //     $this->info("No more pages.");
+                //     $hasMorePages = false;
+                // }
             }
-    
+
             $this->info('Trustpilot reviews have been successfully updated.');
         } catch (\Exception $e) {
             $this->error('Error fetching Trustpilot reviews: ' . $e->getMessage());
         }
     }
-    
+
     /**
      * Helper function to fetch text content safely from the DOM.
      */
@@ -119,4 +131,5 @@ class FetchTrustpilotReviews extends Command
         $node = $xpath->query($query, $context)?->item(0);
         return $node ? trim($node->textContent) : null;
     }
+
 }
