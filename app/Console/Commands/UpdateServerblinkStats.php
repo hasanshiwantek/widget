@@ -31,7 +31,7 @@ class UpdateServerblinkStats extends Command
     public function handle()
     {
         \Log::info('Fetching Trustpilot stats...');
-        $url = 'https://widget.shiwantek.com/api/proxy/serverblink';
+        $url = 'https://widget.advertsedge.com/api/proxy/serverblink';
 
         try {
 

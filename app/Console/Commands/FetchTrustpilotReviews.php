@@ -30,7 +30,7 @@ class FetchTrustpilotReviews extends Command
     {
         \Log::info('fetch:trustpilot-reviews is running');
 
-        $baseUrl = 'https://widget.shiwantek.com/api/proxy/newtownspares?page=1';
+        $baseUrl = 'https://widget.advertsedge.com/api/proxy/newtownspares?page=1';
         $url = $baseUrl;
         $page = 1;
         $hasMorePages = true;
@@ -39,7 +39,7 @@ class FetchTrustpilotReviews extends Command
             Review::query()->where('brand', 1)->delete();
 
             while ($hasMorePages) {
-                $url = "https://widget.shiwantek.com/api/proxy/newtownspares?page={$page}";
+                $url = "https://widget.advertsedge.com/api/proxy/newtownspares?page={$page}";
                 $this->info("Fetching page $page: $url");
 
                 $response = Http::get($url);

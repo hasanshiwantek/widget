@@ -31,7 +31,7 @@ class UpdateStatsTable extends Command
     public function handle()
     {
         \Log::info('Fetching Trustpilot stats...');
-        $url = 'https://widget.shiwantek.com/api/proxy/newtownspares';
+        $url = 'https://widget.advertsedge.com/api/proxy/newtownspares';
 
         try {
 
