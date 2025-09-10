@@ -85,7 +85,7 @@ class FetchServerblinkReviews extends Command
                     $reviewUrl = $reviewUrlNode ? 'https://www.trustpilot.com' . $reviewUrlNode->getAttribute('href') : '';
 
                     // Safe stars img src
-                    $starsNode = $xpath->query('.//div[contains(@class, "star-rating_starRating__")]/img', $card)?->item(0);
+                    $starsNode = $xpath->query('.//img[contains(@class, "CDS_StarRating_starRating__614d2e")]', $card)?->item(0);
                     $stars = $starsNode ? $starsNode->getAttribute('src') : '';
     
                     Review::create([
