@@ -68,7 +68,7 @@ class FetchTrustpilotReviews extends Command
                     $date = $this->getText($xpath, $card, './/time[@data-service-review-date-time-ago="true"]');
                     $reviewHeading = $this->getText($xpath, $card, './/h2[@data-service-review-title-typography="true"]');
                     $reviewContent = $this->getText($xpath, $card, './/p[@data-service-review-text-typography="true"]');
-                    $dateOfExperience = $this->getText($xpath, $card, './/p[@data-service-review-date-of-experience-typography="true"]/span');
+                    $dateOfExperience = $this->getText($xpath, $card, './/div[@data-testid="review-badge-date"]/span');
 
                     // Safe href extraction
                     $reviewUrlNode = $xpath->query('.//a[@data-review-title-typography="true"]', $card)?->item(0);
