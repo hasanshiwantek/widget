@@ -39,24 +39,54 @@ Route::get('/proxy/newtownspares', function (Request $request) {
     return response()->json(['error' => 'Unable to fetch data'], 500);
 });
 
+// Route::get('/proxy/serverblink', function (Request $request) {
+//     // Get the page number from the query parameters (default to page 1 if not provided)
+//     $page = $request->query('page', 1);
+
+//     // Construct the URL with the page number
+//     $url = 'https://www.trustpilot.com/review/serverblink.com?page=' . $page;
+
+//     // Fetch the HTML content from Trustpilot
+//     $response = Http::get($url);
+
+//     // Check if the response is successful
+//     if ($response->successful()) {
+//         // Return the HTML content of the page
+//         return $response->body();
+//     }
+
+//     // Return an error response if fetching fails
+//     return response()->json(['error' => 'Unable to fetch data'], 500);
+// });
+
 Route::get('/proxy/serverblink', function (Request $request) {
-    // Get the page number from the query parameters (default to page 1 if not provided)
     $page = $request->query('page', 1);
 
-    // Construct the URL with the page number
-    $url = 'https://www.trustpilot.com/review/serverblink.com?page=' . $page;
+    $trustpilotUrl = 'https://www.trustpilot.com/review/serverblink.com?page=' . $page;
 
-    // Fetch the HTML content from Trustpilot
-    $response = Http::get($url);
+    try {
+        $response = Http::withToken(env('BROWSER_WORKER_KEY'))
+            ->timeout(90)
+            ->post(env('BROWSER_WORKER_URL') . '/render', [
+                'url' => $trustpilotUrl,
+            ]);
 
-    // Check if the response is successful
-    if ($response->successful()) {
-        // Return the HTML content of the page
-        return $response->body();
+        if ($response->successful()) {
+            return $response->json('html');
+        }
+
+        return response()->json([
+            'error' => 'Unable to fetch data',
+            'worker_status' => $response->status(),
+            'worker_response' => $response->body(),
+        ], 500);
+
+    } catch (\Exception $e) {
+        return response()->json([
+            'error' => 'Browser worker connection failed',
+            'message' => $e->getMessage(),
+        ], 500);
     }
-
-    // Return an error response if fetching fails
-    return response()->json(['error' => 'Unable to fetch data'], 500);
 });
 
 Route::get('/proxy/ctspoint', function (Request $request) {
