@@ -29,7 +29,7 @@ class FetchServerblinkReviews extends Command
     public function handle()
     {
 
-        $baseUrl = 'https://widget.advertsedge.com/api/proxy/serverblink?page=1';
+        $baseUrl = 'https://trust.advertsedge.com/api/proxy/serverblink?page=1';
         $url = $baseUrl; // Start with the first page
         $page = 1;
         $hasMorePages = true;
@@ -39,7 +39,7 @@ class FetchServerblinkReviews extends Command
     
             Review::query()->where('brand', 2)->delete();
             while ($hasMorePages) {
-                $url = "https://widget.advertsedge.com/api/proxy/serverblink?page={$page}";
+                $url = "https://trust.advertsedge.com/api/proxy/serverblink?page={$page}";
                 $this->info("Fetching page $page: $url");
 
                 $response = Http::get($url);
