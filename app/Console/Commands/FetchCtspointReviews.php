@@ -31,7 +31,7 @@ class FetchCtspointReviews extends Command
     public function handle()
     {
 
-        $baseUrl = 'https://widget.advertsedge.com/api/proxy/ctspoint?page=1';
+        $baseUrl = 'https://trust.advertsedge.com/api/proxy/ctspoint?page=1';
         $url = $baseUrl; // Start with the first page
         $hasMorePages = true;
         $page = 1;
@@ -41,7 +41,7 @@ class FetchCtspointReviews extends Command
     
             Review::query()->where('brand', 3)->delete();
             while ($hasMorePages) {
-                $url = "https://widget.advertsedge.com/api/proxy/ctspoint?page={$page}";
+                $url = "https://trust.advertsedge.com/api/proxy/ctspoint?page={$page}";
                 $this->info("Fetching page $page: $url");
 
                 $response = Http::get($url);
