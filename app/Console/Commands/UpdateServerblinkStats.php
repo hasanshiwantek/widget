@@ -53,9 +53,9 @@ class UpdateServerblinkStats extends Command
             $xpath = new \DOMXPath($dom);
 
             // Extract data using XPath
-            $reviewCountElement = $xpath->query('//p[contains(@class, "CDS_Typography_body-s__dd9b51") and contains(@class, "styles_reviewCount__NXlel")]');
-            $ratingCountElement = $xpath->query('//p[contains(@class, "CDS_Typography_display-l__dd9b51") and contains(@class, "styles_trustScore__MVJJI")]');
-            $ratingStatusElement = $xpath->query('//h4[contains(@class, "CDS_Typography_heading-xxs__dd9b51") and contains(@class, "styles_starRatingName__njtqK")]');
+            $reviewCountElement = $xpath->query('//p[contains(@class, "styles_reviewCount__NXlel")]');
+            $ratingCountElement = $xpath->query('//p[contains(@class, "styles_trustScore__MVJJI")]');
+            $ratingStatusElement = $xpath->query('//h4[contains(@class, "styles_starRatingName__njtqK")]');
             $ratingImageElement = $xpath->query('//img[contains(@class, "CDS_StarRating_starRating__614d2e") and contains(@class, "CDS_StarRating_starRatingResponsive__614d2e")]');
 
             // Parse values
