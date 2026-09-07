@@ -55,7 +55,7 @@ class UpdateServerblinkStats extends Command
             // Extract data using XPath
             $reviewCountElement = $xpath->query('//p[contains(@class, "styles_reviewCount__NXlel")]');
             $ratingCountElement = $xpath->query('//p[contains(@class, "styles_trustScore__MVJJI")]');
-            $ratingStatusElement = $xpath->query('//h4[contains(@class, "styles_starRatingName__njtqK")]');
+            $ratingStatusElement = $xpath->query('//h3[contains(@class, "styles_starRatingName__njtqK")]');
             $ratingImageElement = $xpath->query('//img[contains(@class, "CDS_StarRating_starRating__614d2e") and contains(@class, "CDS_StarRating_starRatingResponsive__614d2e")]');
 
             // Parse values
