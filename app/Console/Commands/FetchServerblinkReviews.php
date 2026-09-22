@@ -76,11 +76,25 @@ class FetchServerblinkReviews extends Command
                     $location = $this->getText($xpath, $card, './/span[@data-consumer-country-typography="true"]');
                     $totalReviews = $this->getText($xpath, $card, './/span[@data-consumer-reviews-count-typography="true"]');
                     $date = $this->getText($xpath, $card, './/time[@data-service-review-date-time-ago="true"]');
-                    $reviewHeading = $this->getText($xpath, $card, './/h2[@data-service-review-title-typography="true"]');
+                    // $reviewHeading = $this->getText($xpath, $card, './/h2[@data-service-review-title-typography="true"]');
+                    $reviewHeading = $this->fixEncoding(
+                        $this->getText(
+                            $xpath,
+                            $card,
+                            './/h2[@data-service-review-title-typography="true"]'
+                        )
+                    );
                     \Log::info('Trustpilot Review Heading', [
                         'reviewHeading' => $reviewHeading,
                     ]);
-                    $reviewContent = $this->getText($xpath, $card, './/p[@data-service-review-text-typography="true"]');
+                    // $reviewContent = $this->getText($xpath, $card, './/p[@data-service-review-text-typography="true"]');
+                    $reviewContent = $this->fixEncoding(
+                        $this->getText(
+                            $xpath,
+                            $card,
+                            './/p[@data-service-review-text-typography="true"]'
+                        )
+                    );
                     \Log::info('Trustpilot Review Debug', [
                         'reviewContent' => $reviewContent,
                     ]);
@@ -142,5 +156,18 @@ class FetchServerblinkReviews extends Command
     {
         $node = $xpath->query($query, $context)?->item(0);
         return $node ? trim($node->textContent) : null;
+    }
+
+    private function fixEncoding($text)
+    {
+        if ($text === null) {
+            return null;
+        }
+
+        return mb_convert_encoding(
+            $text,
+            'UTF-8',
+            'Windows-1252'
+        );
     }
 }
