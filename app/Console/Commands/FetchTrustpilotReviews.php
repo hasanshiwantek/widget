@@ -66,8 +66,20 @@ class FetchTrustpilotReviews extends Command
                     $location = $this->getText($xpath, $card, './/span[@data-consumer-country-typography="true"]');
                     $totalReviews = $this->getText($xpath, $card, './/span[@data-consumer-reviews-count-typography="true"]');
                     $date = $this->getText($xpath, $card, './/time[@data-service-review-date-time-ago="true"]');
-                    $reviewHeading = $this->getText($xpath, $card, './/h2[@data-service-review-title-typography="true"]');
-                    $reviewContent = $this->getText($xpath, $card, './/p[@data-service-review-text-typography="true"]');
+                    $reviewHeading = $this->fixEncoding(
+                        $this->getText(
+                            $xpath,
+                            $card,
+                            './/h2[@data-service-review-title-typography="true"]'
+                        )
+                    );
+                    $reviewContent = $this->fixEncoding(
+                        $this->getText(
+                            $xpath,
+                            $card,
+                            './/p[@data-service-review-text-typography="true"]'
+                        )
+                    );
                     $dateOfExperience = $this->getText($xpath, $card, './/div[@data-testid="review-badge-date"]/span');
 
                     // Safe href extraction
@@ -130,6 +142,44 @@ class FetchTrustpilotReviews extends Command
     {
         $node = $xpath->query($query, $context)?->item(0);
         return $node ? trim($node->textContent) : null;
+    }
+
+    private function fixEncoding(?string $text): ?string
+    {
+        if ($text === null || $text === '') {
+            return $text;
+        }
+
+        $replacements = [
+            'Ã¢Â€Â¦' => '…',
+            'Ã¢Â€Â™' => '’',
+            'Ã¢Â€Â˜' => '‘',
+            'Ã¢Â€Âœ' => '“',
+            'Ã¢Â€Â' => '”',
+            'Ã¢Â€Â“' => '–',
+            'Ã¢Â€Â”' => '—',
+
+            'â¦' => '…',
+            'â' => '’',
+            'â' => '‘',
+            'â' => '“',
+            'â' => '”',
+            'â' => '–',
+            'â' => '—',
+
+            'â€¦' => '…',
+            'â€™' => '’',
+            'â€œ' => '“',
+            'â€' => '”',
+            'â€“' => '–',
+            'â€”' => '—',
+        ];
+
+        return str_replace(
+            array_keys($replacements),
+            array_values($replacements),
+            $text
+        );
     }
 
 }

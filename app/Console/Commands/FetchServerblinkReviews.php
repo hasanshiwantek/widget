@@ -158,16 +158,41 @@ class FetchServerblinkReviews extends Command
         return $node ? trim($node->textContent) : null;
     }
 
-    private function fixEncoding($text)
+    private function fixEncoding(?string $text): ?string
     {
-        if ($text === null) {
-            return null;
+        if ($text === null || $text === '') {
+            return $text;
         }
 
-        return mb_convert_encoding(
-            $text,
-            'UTF-8',
-            'Windows-1252'
+        $replacements = [
+            'Ã¢Â€Â¦' => '…',
+            'Ã¢Â€Â™' => '’',
+            'Ã¢Â€Â˜' => '‘',
+            'Ã¢Â€Âœ' => '“',
+            'Ã¢Â€Â' => '”',
+            'Ã¢Â€Â“' => '–',
+            'Ã¢Â€Â”' => '—',
+
+            'â¦' => '…',
+            'â' => '’',
+            'â' => '‘',
+            'â' => '“',
+            'â' => '”',
+            'â' => '–',
+            'â' => '—',
+
+            'â€¦' => '…',
+            'â€™' => '’',
+            'â€œ' => '“',
+            'â€' => '”',
+            'â€“' => '–',
+            'â€”' => '—',
+        ];
+
+        return str_replace(
+            array_keys($replacements),
+            array_values($replacements),
+            $text
         );
     }
 }
