@@ -6,6 +6,8 @@ use Illuminate\Console\Command;
 use App\Models\Stat;
 use App\Models\Review;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class UpdateStatsTable extends Command
 {
@@ -64,14 +66,44 @@ class UpdateStatsTable extends Command
             $ratingStatus = $ratingStatusElement->length > 0 ? $ratingStatusElement->item(0)->textContent : null;
             $ratingImage = $ratingImageElement->length > 0 ? $ratingImageElement->item(0)->getAttribute('src') : null;
 
-            // Save data into the stats table
-            Stat::create([
-            'brand' => 1,
-            'count' => $reviewCount,
-            'rating' => $ratingCount,
-            'status' => $ratingStatus,
-            'image' => $ratingImage,
-            ]);
+            // 6. Validate the data BEFORE deleting anything
+            if (
+                $reviewCount === null ||
+                $ratingCount === null ||
+                $ratingStatus === null
+            ) {
+                $this->error('Unable to extract valid Trustpilot stats.');
+
+                Log::error('Invalid Trustpilot data extracted', [
+                    'reviewCount' => $reviewCount,
+                    'ratingCount' => $ratingCount,
+                    'ratingStatus' => $ratingStatus,
+                    'ratingImage' => $ratingImage,
+                ]);
+
+                return Command::FAILURE;
+            }
+
+            // 7. Only NOW modify the database
+            DB::transaction(function () use (
+                $reviewCount,
+                $ratingCount,
+                $ratingStatus,
+                $ratingImage
+            ) {
+
+                // Delete old data
+                Stat::where('brand', 1)->delete();
+
+                // Insert new data
+                Stat::create([
+                    'brand' => 1,
+                    'count' => $reviewCount,
+                    'rating' => $ratingCount,
+                    'status' => $ratingStatus,
+                    'image' => $ratingImage,
+                ]);
+            });
 
             $this->info('Trustpilot stats have been successfully saved.');
             \Log::info('Trustpilot stats saved successfully.', [
@@ -83,7 +115,13 @@ class UpdateStatsTable extends Command
 
         } catch (\Exception $e) {
             $this->error('Error fetching Trustpilot stats: ' . $e->getMessage());
-            \Log::error('Error fetching Trustpilot stats: ' . $e->getMessage());
+            Log::error('Error updating Trustpilot stats', [
+                'message' => $e->getMessage(),
+                'file' => $e->getFile(),
+                'line' => $e->getLine(),
+            ]);
+
+            return Command::FAILURE;
         }
     }
 
