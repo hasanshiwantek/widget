@@ -36,7 +36,7 @@ class FetchTrustpilotReviews extends Command
         $hasMorePages = true;
 
         try {
-            Review::query()->where('brand', 1)->delete();
+            // Review::query()->where('brand', 1)->delete();
 
             while ($hasMorePages) {
                 $url = "https://trust.advertsedge.com/api/proxy/newtownspares?page={$page}";
