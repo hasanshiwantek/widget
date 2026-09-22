@@ -77,7 +77,13 @@ class FetchServerblinkReviews extends Command
                     $totalReviews = $this->getText($xpath, $card, './/span[@data-consumer-reviews-count-typography="true"]');
                     $date = $this->getText($xpath, $card, './/time[@data-service-review-date-time-ago="true"]');
                     $reviewHeading = $this->getText($xpath, $card, './/h2[@data-service-review-title-typography="true"]');
+                    \Log::info('Trustpilot Review Heading', [
+                        'reviewHeading' => $reviewHeading,
+                    ]);
                     $reviewContent = $this->getText($xpath, $card, './/p[@data-service-review-text-typography="true"]');
+                    \Log::info('Trustpilot Review Debug', [
+                        'reviewContent' => $reviewContent,
+                    ]);
                     $dateOfExperience = $this->getText($xpath, $card, './/div[@data-testid="review-badge-date"]/span');
 
                     // Safe href extraction
