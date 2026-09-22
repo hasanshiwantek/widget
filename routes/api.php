@@ -72,7 +72,11 @@ Route::get('/proxy/serverblink', function (Request $request) {
             ]);
 
         if ($response->successful()) {
-            return $response->json('html');
+            // return $response->json('html');
+            $html = $response->json('html');
+
+            return response($html, 200)
+                ->header('Content-Type', 'text/html; charset=UTF-8');
         }
 
         return response()->json([
@@ -102,7 +106,10 @@ Route::get('/proxy/newtownspares', function (Request $request) {
             ]);
 
         if ($response->successful()) {
-            return $response->json('html');
+            $html = $response->json('html');
+
+            return response($html, 200)
+                ->header('Content-Type', 'text/html; charset=UTF-8');
         }
 
         return response()->json([
@@ -133,7 +140,10 @@ Route::get('/proxy/ctspoint', function (Request $request) {
             ]);
 
         if ($response->successful()) {
-            return $response->json('html');
+            $html = $response->json('html');
+
+            return response($html, 200)
+                ->header('Content-Type', 'text/html; charset=UTF-8');
         }
 
         return response()->json([
