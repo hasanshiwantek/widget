@@ -117,10 +117,31 @@ class FetchTrustpilotReviews extends Command
                 // }
             }
 
+             /*
+            * Only after ALL pages have been successfully fetched
+            * do we touch the database.
+            */
+            DB::transaction(function () use ($reviews) {
+
+                // Delete old data
+                Review::where('brand', 1)->delete();
+
+                // Insert new data
+                foreach ($reviews as $review) {
+                    Review::create($review);
+                }
+            });
+
             $this->info('Trustpilot reviews have been successfully updated.');
         } catch (\Exception $e) {
             $this->error('Error fetching Trustpilot reviews: ' . $e->getMessage());
+            \Log::error('Error fetching Trustpilot reviews', [
+                'message' => $e->getMessage(),
+            ]);
+
+            return Command::FAILURE;
         }
+        return Command::SUCCESS;
     }
 
     /**

@@ -37,8 +37,6 @@ class UpdateStatsTable extends Command
 
         try {
 
-            Stat::query()->where('brand', 1)->delete();
-
             // Fetch HTML content from the Trustpilot proxy URL
             $response = Http::get($url);
 
@@ -112,6 +110,8 @@ class UpdateStatsTable extends Command
                 'ratingStatus' => $ratingStatus,
                 'ratingImage' => $ratingImage,
             ]);
+
+            return Command::SUCCESS;
 
         } catch (\Exception $e) {
             $this->error('Error fetching Trustpilot stats: ' . $e->getMessage());
